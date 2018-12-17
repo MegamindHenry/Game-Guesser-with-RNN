@@ -1,7 +1,9 @@
 import requests
 import json
 from random import shuffle
+import time
 
+start = time.time()
 # count
 error_count = 0
 iter_count = 0
@@ -19,8 +21,11 @@ resp_json = resp.json()
 apps = resp_json["applist"]["apps"]
 
 # iterate as many times as we want
-for lp in range(2):
+for lp in range(50):
     iter_count += 1
+    print("iter:")
+    print(iter_count)
+
     # open and load file
     with open('app_info.json', 'r') as f:
         app_all = json.load(f)
@@ -36,7 +41,7 @@ for lp in range(2):
     # for each app query from store
     for app in rest_apps:
         app_resp = requests.get("http://store.steampowered.com/api/appdetails/?appids=" + str(app["appid"]))
-        #just continue if wrong
+        # just continue if wrong
         if app_resp.status_code != 200:
             # This means something went wrong.
             # app_resp.raise_for_status()
@@ -67,3 +72,8 @@ for lp in range(2):
 
     with open('app_info.json', 'w+') as f:
         f.write(output_all)
+
+end = time.time()
+
+print("running time:")
+print(end - start)
