@@ -19,7 +19,7 @@ resp_json = resp.json()
 apps = resp_json["applist"]["apps"]
 
 # iterate as many times as we want
-for lp in range(50):
+for lp in range(2):
     iter_count += 1
     # open and load file
     with open('app_info.json', 'r') as f:
