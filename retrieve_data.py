@@ -1,6 +1,8 @@
 import requests
 import json
+from random import shuffle
 
+error_count = 0
 
 for lp in range(10):
     with open('app_info.json', 'r') as f:
@@ -12,18 +14,28 @@ for lp in range(10):
     resp = requests.get("http://api.steampowered.com/ISteamApps/GetAppList/v2")
     if resp.status_code != 200:
         # This means something went wrong.
-        resp.raise_for_status()
+        # resp.raise_for_status()
+        print("requests error " + str(error_count))
+        error_count += 1
+        print(resp.status_code)
+        continue
     resp_json = resp.json()
     # print(resp_json)
     apps = resp_json["applist"]["apps"]
 
     rest_apps = [x for x in apps if str(x["appid"]) not in app_all]
 
+    shuffle(rest_apps)
+
     for app in rest_apps[:20]:
         app_resp = requests.get("http://store.steampowered.com/api/appdetails/?appids=" + str(app["appid"]))
         if app_resp.status_code != 200:
             # This means something went wrong.
-            app_resp.raise_for_status()
+            # app_resp.raise_for_status()
+            print("requests error " + str(error_count))
+            error_count += 1
+            print(app_resp.status_code)
+            continue
         app_resp_json = app_resp.json()
         print(app_resp_json)
         app_all.update(app_resp_json)
@@ -37,7 +49,10 @@ for lp in range(10):
     for key in del_key:
         del app_all[key]
 
+    print("all lenth:")
     print(len(app_all))
+    print("failure:")
+    print(len(del_key))
 
     output_all = json.dumps(app_all, indent=4)
 
