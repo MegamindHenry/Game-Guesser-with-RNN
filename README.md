@@ -1,2 +1,4 @@
-# Game-Guesser-with-RNN
-Guess name and genre based on game description
+# Steam-Game-Classification
+A SNLP project by Xuefeng
+
+Data was to big to put into GitHub.
